@@ -12,6 +12,7 @@ class BaseStats:
     endurance: int
 
 
+@dataclass
 class Stats:
     base: BaseStats
     modifiers: list[StatModifier] = field(default_factory=list)
