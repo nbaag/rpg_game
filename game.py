@@ -4,23 +4,47 @@ import time
 import sys
 
 class Entity:
+    BASE_STATS = {
+        "Strength": 0,
+        "Dexterity": 0,
+        "Intelligence": 0,
+        "Wisdom": 0,
+        "Endurance": 0,
+    }
+
     def __init__(self, name, race, level, profession=None):
         self.name = name
         self.race = race
         self.level = level
-        self.stats = base_stats.copy()
+        self.stats = self.BASE_STATS.copy()
         self.health = 0
         self.mana = 0
         self.profession = profession
         
 
 class Profession:
-    def __init__(self, title, damage_stat):
+    def __init__(self, title, damage_stat, abilities=None, allowed_weapons=None, allowed_armor=None):
         self.title = title
         self.damage_stat = damage_stat 
-        self.abilities = []
-        self.allowed_weapons = []
-        self.allowed_armor = []
+        self.abilities = abilities or []
+        self.allowed_weapons = allowed_weapons or []
+        self.allowed_armor = allowed_armor or []
+
+    def __repr__(self):
+        return f"Profession({self.title})"
+    
+
+class Ability:
+    def __init__(self, name, required_level, damage_stat, power, cooldown):
+        self.name = name
+        self.required_level = required_level
+        self.damage_stat = damage_stat
+        self.power = power
+        self.cooldown = cooldown
+
+    def __repr__(self):
+        return f"Ability({self.name}, lv {self.required_level})"
+
         
 
 def typing_effect(text):
@@ -30,37 +54,89 @@ def typing_effect(text):
         time.sleep(0.05)
 
 
-def combat_start(player, enemies):
-    if isinstance(enemies, str):
-        enemies = [enemies]
-    print(f"{player.name} in fight with {', '.join(enemies)}")
+warrior = Profession(
+    title="Warrior",
+    damage_stat="Strength",
+    abilities=[
+        Ability(
+            name="Slash", 
+            required_level=1, 
+            damage_stat="Strength", 
+            power=10, 
+            cooldown=0
+        ),
+        Ability(
+            name="Block", 
+            required_level=2, 
+            damage_stat="Endurance", 
+            power=10, 
+            cooldown=2
+        )
+    ]
+)
 
+mage = Profession(
+    title="Mage",
+    damage_stat="Intelligence",
+    abilities=[
+        Ability(
+            name="Frostbolt", 
+            required_level=1, 
+            damage_stat="Intelligence", 
+            power=10, 
+            cooldown=0
+        ),
+        Ability(
+            name="Fireblast", 
+            required_level=3, 
+            damage_stat="Intelligence", 
+            power=20, 
+            cooldown=2
+        )
+    ]
+)
 
-def attack(attacker, target):
-    target.health -= attacker.attack
-    print(f"{attacker} hits {target} for {attacker.attack}")
+rogue = Profession(
+    title="Rogue",
+    damage_stat="Dexterity",
+    abilities=[
+        Ability(
+            name="Backstab",
+            required_level=1,
+            damage_stat="Dexterity",
+            power=10,
+            cooldown=0
+        ),
+        Ability(
+            name="Evasion",
+            required_level=3,
+            damage_stat="Dexterity",
+            power=20,
+            cooldown=2
+        )
+    ]
+)
 
-
-base_stats = {
-    "Strength": 0,
-    "Dexterity": 0,
-    "Intelligence": 0,
-    "Wisdom": 0,
-    "Endurance": 0,
-}
-
-
-warrior = Profession("Warrior", "Strength")
-warrior.abilities = ["Slash", "Block"]
-
-mage = Profession("Mage", "Intelligence")
-mage.abilities = ["Fireball", "Ice Spike"]
-
-thief = Profession("Thief", "Dexterity")
-thief.abilities = ["Backstab", "Evasion"]
-
-priest = Profession("Priest", "Wisdom")
-priest.abilities = ["Holylight", "Banishment"]
+priest = Profession(
+    title="Priest",
+    damage_stat="Wisdom",
+    abilities=[
+        Ability(
+            name="Holylight",
+            required_level=1,
+            damage_stat="Wisdom",
+            power=10,
+            cooldown=1
+        ),
+        Ability(
+            name="Banisment",
+            required_level=3,
+            damage_stat="Wisdom",
+            power=30,
+            cooldown=3
+        )
+    ]
+)
 
 races = {
     "1": "Human",
@@ -72,7 +148,7 @@ races = {
 classes = {
     "1": warrior,
     "2": mage,
-    "3": thief,
+    "3": rogue,
     "4": priest
 }
 
