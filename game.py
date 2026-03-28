@@ -5,11 +5,11 @@ import sys
 
 class Entity:
     BASE_STATS = {
-        "Strength": 0,
-        "Dexterity": 0,
-        "Intelligence": 0,
-        "Wisdom": 0,
-        "Endurance": 0,
+        "Strength": 1,
+        "Dexterity": 1,
+        "Intelligence": 1,
+        "Wisdom": 1,
+        "Endurance": 1,
     }
 
     def __init__(self, name, race, level, profession=None):
