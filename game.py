@@ -20,6 +20,9 @@ class Entity:
         self.health = 0
         self.mana = 0
         self.profession = profession
+
+class Stats:
+    
         
 
 class Profession:
